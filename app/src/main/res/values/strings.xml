@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">验证码大考验</string>
+    <string name="title_activity_choose_ticket">ChooseTicketActivity</string>
+</resources>
