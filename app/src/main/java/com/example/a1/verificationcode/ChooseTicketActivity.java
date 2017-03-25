@@ -240,12 +240,6 @@ public class ChooseTicketActivity extends AppCompatActivity{
     Runnable runnable3 = new Runnable() {
         @Override
         public void run() {
-            hintResult_txt.post(new Runnable() {
-                @Override
-                public void run() {
-
-                }
-            });
             try {
                 Thread.sleep(2000);
 
