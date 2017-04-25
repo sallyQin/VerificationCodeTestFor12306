@@ -6,7 +6,7 @@
 #####3.多种动画、以及触摸事件配合效果显示。
 
 
-![image](https://github.com/sallyQin/VerificationCodeTestFor12306/app/src/main/res/drawable//readme_display.gif) 
+![image](https://github.com/sallyQin/VerificationCodeTestFor12306/app/src/main/res/drawable/readme_display.gif) 
 
-![image](https://github.com/sallyQinVerificationCodeTestFor12306/app/src/main/res/drawable/display1.png) 
+![image](https://github.com/sallyQin/VerificationCodeTestFor12306/app/src/main/res/drawable/display1.png) 
 ![image](https://github.com/sallyQin/VerificationCodeTestFor12306/app/src/main/res/drawable/display2.png) 
