@@ -1,35 +1,40 @@
 package com.example.a1.verificationcode;
 
+import android.app.LoaderManager;
+import android.content.CursorLoader;
+import android.content.Loader;
+import android.database.Cursor;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.view.View;
 import com.facebook.drawee.view.SimpleDraweeView;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
 
 
-public class MyAdapter extends UniversalAdapter {
+public class MyAdapter extends UniversalAdapter implements LoaderManager.LoaderCallbacks {
 
-    List<Info> list_update;
+
+    List<InfoPlus> list_update;
     static String Star1_name;
     static String Star2_name;
     int totalCorrectNum;
     int UserChosen_CorrectNum;
-
+    ChooseTicketActivity mChooseTicketActivity;
+    private Cursor mCursor;
     public MyAdapter(@LayoutRes int itemRes) {
         super(itemRes);
-        updateGridRecyPics();
     }
 
     @Override
     public void onBindViewHolder(final UniversalHolder holder, final int position) {
         final SimpleDraweeView grid_image = (SimpleDraweeView) holder.itemView.findViewById(R.id.grid_pic);
         final SimpleDraweeView touch_logo = (SimpleDraweeView) holder.itemView.findViewById(R.id.touch_logo);
-        final Info infoRes = list_update.get(position);
+        final InfoPlus infoRes = list_update.get(position);
         if (infoRes.tick) {
             touch_logo.setBackgroundResource(R.drawable.touch_icon);
         } else {
@@ -54,28 +59,15 @@ public class MyAdapter extends UniversalAdapter {
                 }
 
                 notifyItemChanged(position);
-
-
-
-
-//
-//                View logo = holder.get(R.id.touch_logo);               // 建议用法
-//                logo = holder.itemView.findViewById(R.id.touch_logo); // find 但是慢
-//                logo = touch_logo;  // 抓取 final 临时变量，这样也可以
-//
-//                logo.setBackgroundResource(R.drawable.touch_icon);
-
             }
         });
         }
 
 
 
-
-
     @Override
     public int getItemCount() {
-        return 8;
+       return null == list_update ? 0 : list_update.size();
     }
 
     @Override
@@ -84,49 +76,77 @@ public class MyAdapter extends UniversalAdapter {
 
     }
 
-    List<Info> updateGridRecyPics(){ //资源组图
+    List<InfoPlus> updateGridRecyPics(){ //资源组图
 
-        List<Info> list = new ArrayList<>();//新的list，装8图的数据
+        List<InfoPlus> list = new ArrayList<>();//新的list，装8图的数据
         Random random = new Random();
         /**获取“1/2正确”明星的资源图（1或者2个）**/
-        int random_Star1Num = random.nextInt(Info.name.length);//正确图的 随机1/2明星"数号"
-        Star1_name = Info.name[random_Star1Num];//随机获取正确的1/2明星“名字”
-        Map <String ,String[] > map = Info.getTrue_map();
-        String[] strs_corStar1_pic = map.get(Star1_name);//随机获取正确的明星1/2“组图”
-        int n = random.nextInt(2);//在正确明星中图中，随机取（1-2幅图）z张数
-        int random_corPic_1 = random.nextInt(3);//正确组图中随机 选取1张
+       int random_Star1Num = random.nextInt(Info.name.length);//正确图的 随机1/2明星"数号"
+        mCursor.moveToPosition(random_Star1Num * 6); //TTTT
+        Star1_name = mCursor.getString(mCursor.getColumnIndex("sName"));//随机获取正确的1/2明星“名字”
+        int n = random.nextInt(2);//在正确明星中图中，随机取（1-2幅图）张数
+        int random_corPic_1 = random.nextInt(3);//正确组图中随机 选取1张的数字
         int y = 0;
-        if(n == 0){
-            list.add(new Info(Star1_name,true,strs_corStar1_pic[random_corPic_1]));
-        } else {
-            list.add(new Info(Star1_name,true,strs_corStar1_pic[random_corPic_1]));
-            String[] balanceStr_corPicRes  = new String[2];
-            for(int x =0 ;x < strs_corStar1_pic.length;x++){    //若，随机是选取2张组图的话，进行for（）循环
-                if(!strs_corStar1_pic[random_corPic_1].equals(strs_corStar1_pic[x])){
-                    balanceStr_corPicRes[y] = strs_corStar1_pic[x];
-                    y++;
+        String corPicRes1;
+        if(n == 0){  // 随机获取“1”张 1/2明星图片
+        if(random_Star1Num>= 1){
+            mCursor.moveToPosition(random_Star1Num*6 + random_corPic_1);
+            mCursor.getString(mCursor.getColumnIndex("resPic"));
+            list.add(new InfoPlus(Star1_name,true,mCursor.getString(mCursor.getColumnIndex("resPic"))));//add list1
+        } else{
+            mCursor.moveToPosition(random_corPic_1);
+            list.add(new InfoPlus(Star1_name,true,mCursor.getString(mCursor.getColumnIndex("resPic"))));//add list1
+        }} else { // 随机获取“2”张 1/2明星图片
+            String [] balanceStr_corPicRes = new String[2];
+            if(random_Star1Num>= 1){
+                mCursor.moveToPosition(random_Star1Num*6 + random_corPic_1);
+                corPicRes1 = mCursor.getString(mCursor.getColumnIndex("resPic"));//8张中的第1张
+                list.add(new InfoPlus(Star1_name,true,corPicRes1));   // add pic1/8
+                for(int x = 0 ;x < 3;x++){    //在3张正确图中，再随机选取第2张 1/2明星组图，用for（）循环
+                    mCursor.moveToPosition(random_Star1Num*6 + x);
+                    mCursor.getString(mCursor.getColumnIndex("resPic"));
+                    if(!corPicRes1.equals( mCursor.getString(mCursor.getColumnIndex("resPic")))){
+                        balanceStr_corPicRes[y] =  mCursor.getString(mCursor.getColumnIndex("resPic"));
+                        y++;
+                    }
                 }
+                list.add(new InfoPlus(Star1_name,true,balanceStr_corPicRes[ random.nextInt(2)]));  // add pic2/8
+            } else{
+                mCursor.moveToPosition(random_corPic_1);
+                corPicRes1 = mCursor.getString(mCursor.getColumnIndex("resPic"));
+                list.add(new InfoPlus(Star1_name,true,corPicRes1));//add list1
+                for(int x = 0 ;x < 3;x++){    //在3张正确图中，再随机选取第2张 1/2明星组图，用for（）循环
+                    mCursor.moveToPosition(random_corPic_1 + x);
+                    if(!corPicRes1.equals( mCursor.getString(mCursor.getColumnIndex("resPic")))){
+                        balanceStr_corPicRes[y] =  mCursor.getString(mCursor.getColumnIndex("resPic"));
+                        y++;
+                    }
+                }
+                list.add(new InfoPlus(Star1_name,true,balanceStr_corPicRes[ random.nextInt(2)]));  // add pic2/8
             }
-            list.add(new Info(Star1_name,true,balanceStr_corPicRes[ random.nextInt(2)]));//把随机选取的第二张正确的图，加入list里。
         }
 
         /**获取“1/2 非正确”明星2者之一的资源图（2或3个）**/
         int blanceNum_cor1 = 4 - list.size();
-        String[] strs_falseStar1_pic = Info.getFalse_map().get(Star1_name);//随机获取"非正确"的1/2明星的组图
         int  random_falseStar1_num = random.nextInt(3);//在 非正确 明星的图中，随机取（2-3幅图）中之一数号
         if(blanceNum_cor1 == 2){
-            list.add(new Info(Star1_name,false,strs_falseStar1_pic[random_falseStar1_num]));
+            mCursor.moveToPosition(random_Star1Num*6 + 3+ random_falseStar1_num);
+            String strs_falseStar1_res = mCursor.getString(mCursor.getColumnIndex("resPic"));
+            list.add(new InfoPlus(Star1_name,false, mCursor.getString(mCursor.getColumnIndex("resPic"))));
             for(int x= 0;x< 3;x++){//若，随机是选取2张组图的话
-                if(!strs_falseStar1_pic[random_falseStar1_num].equals(strs_falseStar1_pic[x])){
-                    list.add(new Info(Star1_name,false,strs_falseStar1_pic[x]));
+                mCursor.moveToPosition(random_Star1Num*6 + 3 + x);
+                if(!strs_falseStar1_res.equals(mCursor.getString(mCursor.getColumnIndex("resPic")))){
+                    list.add(new InfoPlus(Star1_name,false,mCursor.getString(mCursor.getColumnIndex("resPic"))));
                     break;
                 }
             }
         }else if(blanceNum_cor1 == 3){
             for(int x = 0;x < 3;x++){//若，随机是选取3张组图的话
-                list.add(new Info(Star1_name,false,strs_falseStar1_pic[x]));
+                mCursor.moveToPosition(random_Star1Num*6 + 3+ x);
+                list.add(new InfoPlus(Star1_name,false, mCursor.getString(mCursor.getColumnIndex("resPic"))));
             }
         }
+
           /**获取“2/2正确”明星的资源图（1或者2个）**/
         String[] star2NamesStrs = new String[25];
         int q = 0;
@@ -138,40 +158,53 @@ public class MyAdapter extends UniversalAdapter {
         }
         int random_Star2Num = random.nextInt(star2NamesStrs.length);//正确图2/2的 随机明星"数号"
         Star2_name = star2NamesStrs[random_Star2Num];//随机获取正确的2/2明星“名字”
-        String[] strs_corStar2_pic = map.get(Star2_name);//随机获取正确的明星1/2“组图”
-        int t = random.nextInt(2);//在正确明星中图中，随机取（1-2幅图）数字号
+        int t = random.nextInt(2);//在正确明星图中，随机取（1-2幅图）数字号
         int random_corPic_2 = random.nextInt(3);//正确组图中随机 选取1张
+        List<InfoPlus> secondStarResList = new ArrayList<>();
+        Boolean statusTf;
+        mCursor.moveToPosition(-1);
+        while (mCursor.moveToNext()) {
+            if (mCursor.getString(mCursor.getColumnIndex("sName")).equals(Star2_name)) {
+                if (mCursor.getString(mCursor.getColumnIndex("trueOrFalse")).equals("true")) {
+                    statusTf = true;
+                } else {
+                    statusTf = false;
+                }
+                secondStarResList.add(new InfoPlus(Star2_name, statusTf, mCursor.getString(mCursor.getColumnIndex("resPic"))));
+
+            }
+        }
+        
         int z = 0;
-        if(t == 0){
-            list.add(new Info(Star2_name,true,strs_corStar2_pic[random_corPic_2]));
-        } else {
-            list.add(new Info(Star2_name,true,strs_corStar2_pic[random_corPic_2]));
+        if(t == 0){ //选取1张
+            list.add(secondStarResList.get(random_corPic_2 ));
+        } else { //选取2张
+            list.add(secondStarResList.get(random_corPic_2));
             String[] balStr_corPicRes  = new String[2];
-            for(int x =0 ;x < strs_corStar2_pic.length;x++){    //若，随机是选取2张组图的话，进行for（）循环
-                if(!strs_corStar2_pic[random_corPic_2].equals(strs_corStar2_pic[x])){
-                    balStr_corPicRes[z] = strs_corStar2_pic[x];
+            for(int x =0 ;x < 3;x++){    //若，随机是选取2张组图的话，进行for（）循环
+                if(!secondStarResList.get(random_corPic_2).resPic.equals(secondStarResList.get(x).resPic)){
+                    balStr_corPicRes[z] = secondStarResList.get(x).resPic;
                     z++;
                 }
             }
 
-            list.add(new Info(Star2_name,true,balStr_corPicRes[ random.nextInt(2)]));//把随机选取的第二张正确的图，加入list里。
+            list.add(new InfoPlus(Star2_name,true,balStr_corPicRes[ random.nextInt(2)]));//把随机选取的第二张正确的图，加入list里。
         }
 
         /**获取“2/2 非正确”明星2者之一的资源图（2或3个）**/
         int balanceNum_cor2 = 8 - list.size();
-        String[] strs_falseStar2_pic = Info.getFalse_map().get(Star2_name);//随机获取"非正确"的2/2明星的组图
         int  random_falseStar2_num = random.nextInt(balanceNum_cor2);//在 非正确 明星的图中，随机取（2-3幅图）中之一数号
         if(balanceNum_cor2 == 2){
-            list.add(new Info(Star2_name,false,strs_falseStar2_pic[random_falseStar2_num]));
+            list.add(new InfoPlus(Star2_name,false,secondStarResList.get(random_falseStar2_num + 3).resPic));
             for(int x= 0;x< 3;x++){//若，随机是选取2张组图的话
-                if(!strs_falseStar2_pic[random_falseStar2_num].equals(strs_falseStar2_pic[x])){
-                    list.add(new Info(Star2_name,false,strs_falseStar2_pic[x]));
+                if(!secondStarResList.get(random_falseStar2_num + 3).resPic.equals(secondStarResList.get(3 +x).resPic)){
+                    list.add(new InfoPlus(Star2_name,false,secondStarResList.get(3 +x).resPic));
                     break;
                 }
             }
         }else{
             for(int x = 0;x < 3;x++){//若，随机是选取3张组图的话
-                list.add(new Info(Star2_name,false,strs_falseStar2_pic[x]));
+                list.add(new InfoPlus(Star2_name,false,secondStarResList.get(3 +x).resPic));
             }
         }
         Collections.shuffle(list);//打乱这8组图的顺序
@@ -186,5 +219,27 @@ public class MyAdapter extends UniversalAdapter {
         return  list;
     }
 
+    @Override
+    public Loader onCreateLoader(int i, Bundle bundle) {
+        return new CursorLoader(mChooseTicketActivity,InfoProvider.URI_PROVIDER,null, null, null,null);
+    }
+
+    @Override
+    public void onLoadFinished(Loader loader, Object data) {
+        if (mCursor != data) {
+            if (mCursor != null) {
+                mCursor.close();
+            }
+            mCursor = (Cursor) data;
+        }
+        updateGridRecyPics();
+        mChooseTicketActivity.reloadStarText();//设置明星名字的text
+        notifyDataSetChanged();
+    }
+
+    @Override
+    public void onLoaderReset(Loader loader) {
+
+    }
 }
 

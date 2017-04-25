@@ -1,7 +1,6 @@
 package com.example.a1.verificationcode;
 
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
@@ -48,6 +47,10 @@ public class ChooseTicketActivity extends AppCompatActivity{
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         myGridAdapter = new MyAdapter(R.layout.my_adapter);
         recyclerView.setAdapter(myGridAdapter);
+        myGridAdapter.mChooseTicketActivity = ChooseTicketActivity.this; //
+        getLoaderManager().restartLoader(1, null, myGridAdapter);//*LoaderManager就是加载器的管理器，一个LoaderManager可管理一个或多个Loader，
+        // 一个Activity只能有一个LoadManager. LoaderManager管理Loader的初始化，重启和销毁操作。
+
         times_pic = (ImageView) findViewById(R.id.times_pic);
         random_text1 = (TextView) findViewById(R.id.random_text1);
         random_text2 = (TextView) findViewById(R.id.random_text2);
@@ -91,7 +94,7 @@ public class ChooseTicketActivity extends AppCompatActivity{
                         hintResult_txt.setText("验证错误，请重新验证");
                         show_starName_linear.setVisibility(View.INVISIBLE);
                         Thread thread2 = new Thread(runnable4);
-                        thread2.run();
+                        thread2.start();
                         times_pic.setImageResource(R.drawable.yellow_led);
                         Log.d("你做错了！！！",""+myGridAdapter.UserChosen_CorrectNum);
                     }
@@ -106,7 +109,6 @@ public class ChooseTicketActivity extends AppCompatActivity{
 
         });
 
-        reloadStarText();//设置明星名字的text
 
         try {
             getShiningHintText(); //设置闪烁字
@@ -200,6 +202,7 @@ public class ChooseTicketActivity extends AppCompatActivity{
         }
     };
 
+
     /**
      * 1.5秒后，黄色灯变绿色灯+答对数字的显示，后0.5秒后返回黄灯状态。
      * **/
@@ -240,6 +243,7 @@ public class ChooseTicketActivity extends AppCompatActivity{
     Runnable runnable3 = new Runnable() {
         @Override
         public void run() {
+
             try {
                 Thread.sleep(2000);
 
@@ -267,15 +271,16 @@ public class ChooseTicketActivity extends AppCompatActivity{
     Runnable runnable4 = new Runnable() {
         @Override
         public void run() {
+            try {
+                Thread.sleep(2000);
+
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
             show_starName_linear.post(new Runnable() {
                 @Override
                 public void run() {
-                    try {
-                        Thread.sleep(2000);
-
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
                     show_cover_pic.setVisibility(View.INVISIBLE);
                     recyclerView.setVisibility(View.VISIBLE);
                     show_starName_linear.setVisibility(View.VISIBLE);

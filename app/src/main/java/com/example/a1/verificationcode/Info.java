@@ -1,5 +1,6 @@
 package com.example.a1.verificationcode;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -14,7 +15,7 @@ import java.util.Map;
  * Created by 1 on 2017/3/8.
  */
 
-public class Info {
+public class Info extends SQLiteOpenHelper {
 
     String sName;
     boolean trueOrFalse;
@@ -22,11 +23,18 @@ public class Info {
     boolean tick;
 
 
-    public Info(String sName, Boolean trueOrFalse, String resPic){
-        this.sName = sName;
-        this.trueOrFalse = trueOrFalse;
-        this.resPic =resPic;
+     Info(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
+        super(context, "Info", null, 1);
     }
+
+//
+//    Info(String sName, Boolean trueOrFalse, String resPic){
+//
+//        this.sName = sName;
+//        this.trueOrFalse = trueOrFalse;
+//        this.resPic =resPic;
+//    }
+
 
     static String[] yangmu = new String[]{"a_yangmi_1","a_yangmi_2","a_yangmi_3"};//杨幂_a
     static String[] wrong_a = new String[]{"a_wrong_1","a_wrong_2","a_wrong_3"};//wrong_a
@@ -87,6 +95,8 @@ public class Info {
 
 
 static Map<String,String[]> true_map = new HashMap<>();
+
+
     static public Map<String, String[]> getTrue_map() {
         true_map.put("杨幂",yangmu);
         true_map.put("陈好",chenhao);
@@ -152,5 +162,666 @@ static Map<String,String[]> true_map = new HashMap<>();
         return false_map;
     }
 
-    String [] typeFace = new String[]{"fonts/huakang.ttf","fonts/huawen.ttf","fonts/longhai.ttf","fonts/wending.ttf"};//字体
+
+    @Override
+    public void onCreate(SQLiteDatabase sq) {
+        String sqlStr = "create table verificationCode( sName Text,trueOrFalse Text,resPic Text)";
+        sq.execSQL(sqlStr);
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("sName",name[0]);
+        contentValues.put("trueOrFalse","true");
+        contentValues.put("resPic",yangmu[0]);
+        sq.insert("verificationCode",null,contentValues);//杨幂_a_1
+        contentValues.put("sName",name[0]);
+        contentValues.put("trueOrFalse","true");
+        contentValues.put("resPic",yangmu[1]);
+        sq.insert("verificationCode",null,contentValues);//杨幂_a_2
+        contentValues.put("sName",name[0]);
+        contentValues.put("trueOrFalse","true");
+        contentValues.put("resPic",yangmu[2]);
+        sq.insert("verificationCode",null,contentValues);//杨幂_a_3
+        contentValues.put("sName",name[0]);
+        contentValues.put("trueOrFalse","false");
+        contentValues.put("resPic",wrong_a[0]);
+        sq.insert("verificationCode",null,contentValues);//wrong_a_1
+        contentValues.put("sName",name[0]);
+        contentValues.put("trueOrFalse","false");
+        contentValues.put("resPic",wrong_a[1]);
+        sq.insert("verificationCode",null,contentValues);//wrong_a_2
+        contentValues.put("sName",name[0]);
+        contentValues.put("trueOrFalse","false");
+        contentValues.put("resPic",wrong_a[2]);
+        sq.insert("verificationCode",null,contentValues);//wrong_a_3
+
+        contentValues.put("sName",name[1]);
+        contentValues.put("trueOrFalse","true");
+        contentValues.put("resPic",chenhao[0]);
+        sq.insert("verificationCode",null,contentValues);//陈好_b_1
+        contentValues.put("sName",name[1]);
+        contentValues.put("trueOrFalse","true");
+        contentValues.put("resPic",chenhao[1]);
+        sq.insert("verificationCode",null,contentValues);//陈好_b_2
+        contentValues.put("sName",name[1]);
+        contentValues.put("trueOrFalse","true");
+        contentValues.put("resPic",chenhao[2]);
+        sq.insert("verificationCode",null,contentValues);//陈好_b_3
+        contentValues.put("sName",name[1]);
+        contentValues.put("trueOrFalse","false");
+        contentValues.put("resPic",wrong_b[0]);
+        sq.insert("verificationCode",null,contentValues);//wrong_b_1
+        contentValues.put("sName",name[1]);
+        contentValues.put("trueOrFalse","false");
+        contentValues.put("resPic",wrong_b[1]);
+        sq.insert("verificationCode",null,contentValues);//wrong_b_2
+        contentValues.put("sName",name[1]);
+        contentValues.put("trueOrFalse","false");
+        contentValues.put("resPic",wrong_b[2]);
+        sq.insert("verificationCode",null,contentValues);//wrong_b_1
+
+        contentValues.put("sName",name[2]);
+        contentValues.put("trueOrFalse","true");
+        contentValues.put("resPic",zhangziyi[0]);
+        sq.insert("verificationCode",null,contentValues);//章子怡_c_1
+        contentValues.put("sName",name[2]);
+        contentValues.put("trueOrFalse","true");
+        contentValues.put("resPic",zhangziyi[1]);
+        sq.insert("verificationCode",null,contentValues);//章子怡_c_2
+        contentValues.put("sName",name[2]);
+        contentValues.put("trueOrFalse","true");
+        contentValues.put("resPic",zhangziyi[2]);
+        sq.insert("verificationCode",null,contentValues);//章子怡_c_3
+        contentValues.put("sName",name[2]);
+        contentValues.put("trueOrFalse","false");
+        contentValues.put("resPic",wrong_c[0]);
+        sq.insert("verificationCode",null,contentValues);//wrong_c_1
+        contentValues.put("sName",name[2]);
+        contentValues.put("trueOrFalse","false");
+        contentValues.put("resPic",wrong_c[1]);
+        sq.insert("verificationCode",null,contentValues);//wrong_c_2
+        contentValues.put("sName",name[2]);
+        contentValues.put("trueOrFalse","false");
+        contentValues.put("resPic",wrong_c[2]);
+        sq.insert("verificationCode",null,contentValues);//wrong_c_3
+
+        contentValues.put("sName",name[3]);
+        contentValues.put("trueOrFalse","true");
+        contentValues.put("resPic",mayili[0]);
+        sq.insert("verificationCode",null,contentValues);//马伊琍_d_1
+        contentValues.put("sName",name[3]);
+        contentValues.put("trueOrFalse","true");
+        contentValues.put("resPic",mayili[1]);
+        sq.insert("verificationCode",null,contentValues);//马伊琍_d_2
+        contentValues.put("sName",name[3]);
+        contentValues.put("trueOrFalse","true");
+        contentValues.put("resPic",mayili[2]);
+        sq.insert("verificationCode",null,contentValues);//马伊琍_d_3
+        contentValues.put("sName",name[3]);
+        contentValues.put("trueOrFalse","false");
+        contentValues.put("resPic",wrong_d[0]);
+        sq.insert("verificationCode",null,contentValues);//wrong_d_1
+        contentValues.put("sName",name[3]);
+        contentValues.put("trueOrFalse","false");
+        contentValues.put("resPic",wrong_d[1]);
+        sq.insert("verificationCode",null,contentValues);//wrong_d_2
+        contentValues.put("sName",name[3]);
+        contentValues.put("trueOrFalse","false");
+        contentValues.put("resPic",wrong_d[2]);
+        sq.insert("verificationCode",null,contentValues);//wrong_d_3
+
+        contentValues.put("sName",name[4]);
+        contentValues.put("trueOrFalse","true");
+        contentValues.put("resPic",linwenlong[0]);
+        sq.insert("verificationCode",null,contentValues);//林文龙_e_1
+        contentValues.put("sName",name[4]);
+        contentValues.put("trueOrFalse","true");
+        contentValues.put("resPic",linwenlong[1]);
+        sq.insert("verificationCode",null,contentValues);//林文龙_e_2
+        contentValues.put("sName",name[4]);
+        contentValues.put("trueOrFalse","true");
+        contentValues.put("resPic",linwenlong[2]);
+        sq.insert("verificationCode",null,contentValues);//林文龙_e_3
+        contentValues.put("sName",name[4]);
+        contentValues.put("trueOrFalse","false");
+        contentValues.put("resPic",wrong_e[0]);
+        sq.insert("verificationCode",null,contentValues);//wrong_e_1
+        contentValues.put("sName",name[4]);
+        contentValues.put("trueOrFalse","false");
+        contentValues.put("resPic",wrong_e[1]);
+        sq.insert("verificationCode",null,contentValues);//wrong_e_2
+        contentValues.put("sName",name[4]);
+        contentValues.put("trueOrFalse","false");
+        contentValues.put("resPic",wrong_e[2]);
+        sq.insert("verificationCode",null,contentValues);//wrong_e_3
+
+        contentValues.put("sName",name[5]);
+        contentValues.put("trueOrFalse","true");
+        contentValues.put("resPic",fanbingbing[0]);
+        sq.insert("verificationCode",null,contentValues);//范冰冰_f_1
+        contentValues.put("sName",name[5]);
+        contentValues.put("trueOrFalse","true");
+        contentValues.put("resPic",fanbingbing[1]);
+        sq.insert("verificationCode",null,contentValues);//范冰冰_f_2
+        contentValues.put("sName",name[5]);
+        contentValues.put("trueOrFalse","true");
+        contentValues.put("resPic",fanbingbing[2]);
+        sq.insert("verificationCode",null,contentValues);//范冰冰_f_3
+        contentValues.put("sName",name[5]);
+        contentValues.put("trueOrFalse","false");
+        contentValues.put("resPic",wrong_f[0]);
+        sq.insert("verificationCode",null,contentValues);//wrong_f_1
+        contentValues.put("sName",name[5]);
+        contentValues.put("trueOrFalse","false");
+        contentValues.put("resPic",wrong_f[1]);
+        sq.insert("verificationCode",null,contentValues);//wrong_f_2
+        contentValues.put("sName",name[5]);
+        contentValues.put("trueOrFalse","false");
+        contentValues.put("resPic",wrong_f[2]);
+        sq.insert("verificationCode",null,contentValues);//wrong_f_3
+
+        contentValues.put("sName",name[6]);
+        contentValues.put("trueOrFalse","true");
+        contentValues.put("resPic",xiayu[0]);
+        sq.insert("verificationCode",null,contentValues);//夏雨_g_1
+        contentValues.put("sName",name[6]);
+        contentValues.put("trueOrFalse","true");
+        contentValues.put("resPic",xiayu[1]);
+        sq.insert("verificationCode",null,contentValues);//夏雨_g_2
+        contentValues.put("sName",name[6]);
+        contentValues.put("trueOrFalse","true");
+        contentValues.put("resPic",xiayu[2]);
+        sq.insert("verificationCode",null,contentValues);//夏雨_g_3
+        contentValues.put("sName",name[6]);
+        contentValues.put("trueOrFalse","false");
+        contentValues.put("resPic",wrong_g[0]);
+        sq.insert("verificationCode",null,contentValues);//wrong_g_1
+        contentValues.put("sName",name[6]);
+        contentValues.put("trueOrFalse","false");
+        contentValues.put("resPic",wrong_g[1]);
+        sq.insert("verificationCode",null,contentValues);//wrong_g_2
+        contentValues.put("sName",name[6]);
+        contentValues.put("trueOrFalse","false");
+        contentValues.put("resPic",wrong_g[2]);
+        sq.insert("verificationCode",null,contentValues);//wrong_g_3
+
+        contentValues.put("sName",name[7]);
+        contentValues.put("trueOrFalse","true");
+        contentValues.put("resPic",aobama[0]);
+        sq.insert("verificationCode",null,contentValues);//奥巴马_h_1
+        contentValues.put("sName",name[7]);
+        contentValues.put("trueOrFalse","true");
+        contentValues.put("resPic",aobama[1]);
+        sq.insert("verificationCode",null,contentValues);//奥巴马_h_2
+        contentValues.put("sName",name[7]);
+        contentValues.put("trueOrFalse","true");
+        contentValues.put("resPic",aobama[2]);
+        sq.insert("verificationCode",null,contentValues);//奥巴马_h_3
+        contentValues.put("sName",name[7]);
+        contentValues.put("trueOrFalse","false");
+        contentValues.put("resPic",wrong_h[0]);
+        sq.insert("verificationCode",null,contentValues);//wrong_h_1
+        contentValues.put("sName",name[7]);
+        contentValues.put("trueOrFalse","false");
+        contentValues.put("resPic",wrong_h[1]);
+        sq.insert("verificationCode",null,contentValues);//wrong_h_1
+        contentValues.put("sName",name[7]);
+        contentValues.put("trueOrFalse","false");
+        contentValues.put("resPic",wrong_h[2]);
+        sq.insert("verificationCode",null,contentValues);//wrong_h_1
+
+        contentValues.put("sName",name[8]);
+        contentValues.put("trueOrFalse","true");
+        contentValues.put("resPic",gongli[0]);
+        sq.insert("verificationCode",null,contentValues);//巩俐_i_1
+        contentValues.put("sName",name[8]);
+        contentValues.put("trueOrFalse","true");
+        contentValues.put("resPic",gongli[1]);
+        sq.insert("verificationCode",null,contentValues);//巩俐_i_2
+        contentValues.put("sName",name[8]);
+        contentValues.put("trueOrFalse","true");
+        contentValues.put("resPic",gongli[2]);
+        sq.insert("verificationCode",null,contentValues);//巩俐_i_3
+        contentValues.put("sName",name[8]);
+        contentValues.put("trueOrFalse","false");
+        contentValues.put("resPic",wrong_i[0]);
+        sq.insert("verificationCode",null,contentValues);//wrong_i_1
+        contentValues.put("sName",name[8]);
+        contentValues.put("trueOrFalse","false");
+        contentValues.put("resPic",wrong_i[1]);
+        sq.insert("verificationCode",null,contentValues);//wrong_i_2
+        contentValues.put("sName",name[8]);
+        contentValues.put("trueOrFalse","false");
+        contentValues.put("resPic",wrong_i[2]);
+        sq.insert("verificationCode",null,contentValues);//wrong_i_3
+
+        contentValues.put("sName",name[9]);
+        contentValues.put("trueOrFalse","true");
+        contentValues.put("resPic",zhouxun[0]);
+        sq.insert("verificationCode",null,contentValues);//周迅_j_1
+        contentValues.put("sName",name[9]);
+        contentValues.put("trueOrFalse","true");
+        contentValues.put("resPic",zhouxun[1]);
+        sq.insert("verificationCode",null,contentValues);//周迅_j_2
+        contentValues.put("sName",name[9]);
+        contentValues.put("trueOrFalse","true");
+        contentValues.put("resPic",zhouxun[2]);
+        sq.insert("verificationCode",null,contentValues);//周迅_j_3
+        contentValues.put("sName",name[9]);
+        contentValues.put("trueOrFalse","false");
+        contentValues.put("resPic",wrong_j[0]);
+        sq.insert("verificationCode",null,contentValues);//wrong_j_1
+        contentValues.put("sName",name[9]);
+        contentValues.put("trueOrFalse","false");
+        contentValues.put("resPic",wrong_j[1]);
+        sq.insert("verificationCode",null,contentValues);//wrong_j_2
+        contentValues.put("sName",name[9]);
+        contentValues.put("trueOrFalse","false");
+        contentValues.put("resPic",wrong_j[2]);
+        sq.insert("verificationCode",null,contentValues);//wrong_j_3
+
+        contentValues.put("sName",name[10]);
+        contentValues.put("trueOrFalse","true");
+        contentValues.put("resPic",linyilian[0]);
+        sq.insert("verificationCode",null,contentValues);//林忆莲_k_1
+        contentValues.put("sName",name[10]);
+        contentValues.put("trueOrFalse","true");
+        contentValues.put("resPic",linyilian[1]);
+        sq.insert("verificationCode",null,contentValues);//林忆莲_k_2
+        contentValues.put("sName",name[10]);
+        contentValues.put("trueOrFalse","true");
+        contentValues.put("resPic",linyilian[2]);
+        sq.insert("verificationCode",null,contentValues);//林忆莲_k_3
+        contentValues.put("sName",name[10]);
+        contentValues.put("trueOrFalse","false");
+        contentValues.put("resPic",wrong_k[0]);
+        sq.insert("verificationCode",null,contentValues);//wrong_k_1
+        contentValues.put("sName",name[10]);
+        contentValues.put("trueOrFalse","false");
+        contentValues.put("resPic",wrong_k[1]);
+        sq.insert("verificationCode",null,contentValues);//wrong_k_2
+        contentValues.put("sName",name[10]);
+        contentValues.put("trueOrFalse","false");
+        contentValues.put("resPic",wrong_k[2]);
+        sq.insert("verificationCode",null,contentValues);//wrong_k_3
+
+        contentValues.put("sName",name[11]);
+        contentValues.put("trueOrFalse","true");
+        contentValues.put("resPic",zhangguorong[0]);
+        sq.insert("verificationCode",null,contentValues);//张国荣_l_1
+        contentValues.put("sName",name[11]);
+        contentValues.put("trueOrFalse","true");
+        contentValues.put("resPic",zhangguorong[1]);
+        sq.insert("verificationCode",null,contentValues);//张国荣_l_2
+        contentValues.put("sName",name[11]);
+        contentValues.put("trueOrFalse","true");
+        contentValues.put("resPic",zhangguorong[2]);
+        sq.insert("verificationCode",null,contentValues);//张国荣_l_3
+        contentValues.put("sName",name[11]);
+        contentValues.put("trueOrFalse","false");
+        contentValues.put("resPic",wrong_l[0]);
+        sq.insert("verificationCode",null,contentValues);//wrong_l_1
+        contentValues.put("sName",name[11]);
+        contentValues.put("trueOrFalse","false");
+        contentValues.put("resPic",wrong_l[1]);
+        sq.insert("verificationCode",null,contentValues);//wrong_l_2
+        contentValues.put("sName",name[11]);
+        contentValues.put("trueOrFalse","false");
+        contentValues.put("resPic",wrong_l[2]);
+        sq.insert("verificationCode",null,contentValues);//wrong_l_3
+
+        contentValues.put("sName",name[12]);
+        contentValues.put("trueOrFalse","true");
+        contentValues.put("resPic",wangfeng[0]);
+        sq.insert("verificationCode",null,contentValues);//汪峰_m_1
+        contentValues.put("sName",name[12]);
+        contentValues.put("trueOrFalse","true");
+        contentValues.put("resPic",wangfeng[1]);
+        sq.insert("verificationCode",null,contentValues);//汪峰_m_2
+        contentValues.put("sName",name[12]);
+        contentValues.put("trueOrFalse","true");
+        contentValues.put("resPic",wangfeng[2]);
+        sq.insert("verificationCode",null,contentValues);//汪峰_m_3
+        contentValues.put("sName",name[12]);
+        contentValues.put("trueOrFalse","false");
+        contentValues.put("resPic",wrong_m[0]);
+        sq.insert("verificationCode",null,contentValues);//wrong_m_1
+        contentValues.put("sName",name[12]);
+        contentValues.put("trueOrFalse","false");
+        contentValues.put("resPic",wrong_m[1]);
+        sq.insert("verificationCode",null,contentValues);//wrong_m_2
+        contentValues.put("sName",name[12]);
+        contentValues.put("trueOrFalse","false");
+        contentValues.put("resPic",wrong_m[2]);
+        sq.insert("verificationCode",null,contentValues);//wrong_m_3
+
+        contentValues.put("sName",name[13]);
+        contentValues.put("trueOrFalse","true");
+        contentValues.put("resPic",xuzheng[0]);
+        sq.insert("verificationCode",null,contentValues);//徐峥_n_1
+        contentValues.put("sName",name[13]);
+        contentValues.put("trueOrFalse","true");
+        contentValues.put("resPic",xuzheng[1]);
+        sq.insert("verificationCode",null,contentValues);//徐峥_n_2
+        contentValues.put("sName",name[13]);
+        contentValues.put("trueOrFalse","true");
+        contentValues.put("resPic",xuzheng[2]);
+        sq.insert("verificationCode",null,contentValues);//徐峥_n_3
+        contentValues.put("sName",name[13]);
+        contentValues.put("trueOrFalse","false");
+        contentValues.put("resPic",wrong_n[0]);
+        sq.insert("verificationCode",null,contentValues);//wrong_n_1
+        contentValues.put("sName",name[13]);
+        contentValues.put("trueOrFalse","false");
+        contentValues.put("resPic",wrong_n[1]);
+        sq.insert("verificationCode",null,contentValues);//wrong_n_2
+        contentValues.put("sName",name[13]);
+        contentValues.put("trueOrFalse","false");
+        contentValues.put("resPic",wrong_n[2]);
+        sq.insert("verificationCode",null,contentValues);//wrong_n_3
+
+        contentValues.put("sName",name[14]);
+        contentValues.put("trueOrFalse","true");
+        contentValues.put("resPic",fangzuming[0]);
+        sq.insert("verificationCode",null,contentValues);//房祖名_o_1
+        contentValues.put("sName",name[14]);
+        contentValues.put("trueOrFalse","true");
+        contentValues.put("resPic",fangzuming[1]);
+        sq.insert("verificationCode",null,contentValues);//房祖名_o_2
+        contentValues.put("sName",name[14]);
+        contentValues.put("trueOrFalse","true");
+        contentValues.put("resPic",fangzuming[2]);
+        sq.insert("verificationCode",null,contentValues);//房祖名_o_3
+        contentValues.put("sName",name[14]);
+        contentValues.put("trueOrFalse","false");
+        contentValues.put("resPic",wrong_o[0]);
+        sq.insert("verificationCode",null,contentValues);//wrong_o_1
+        contentValues.put("sName",name[14]);
+        contentValues.put("trueOrFalse","false");
+        contentValues.put("resPic",wrong_o[1]);
+        sq.insert("verificationCode",null,contentValues);//wrong_o_2
+        contentValues.put("sName",name[14]);
+        contentValues.put("trueOrFalse","false");
+        contentValues.put("resPic",wrong_o[2]);
+        sq.insert("verificationCode",null,contentValues);//wrong_o_3
+
+        contentValues.put("sName",name[15]);
+        contentValues.put("trueOrFalse","true");
+        contentValues.put("resPic",wangludan[0]);
+        sq.insert("verificationCode",null,contentValues);//王璐丹_p_1
+        contentValues.put("sName",name[15]);
+        contentValues.put("trueOrFalse","true");
+        contentValues.put("resPic",wangludan[1]);
+        sq.insert("verificationCode",null,contentValues);//王璐丹_p_2
+        contentValues.put("sName",name[15]);
+        contentValues.put("trueOrFalse","true");
+        contentValues.put("resPic",wangludan[2]);
+        sq.insert("verificationCode",null,contentValues);//王璐丹_p_3
+        contentValues.put("sName",name[15]);
+        contentValues.put("trueOrFalse","false");
+        contentValues.put("resPic",wrong_p[0]);
+        sq.insert("verificationCode",null,contentValues);//wrong_p_1
+        contentValues.put("sName",name[15]);
+        contentValues.put("trueOrFalse","false");
+        contentValues.put("resPic",wrong_p[1]);
+        sq.insert("verificationCode",null,contentValues);//wrong_p_2
+        contentValues.put("sName",name[15]);
+        contentValues.put("trueOrFalse","false");
+        contentValues.put("resPic",wrong_p[2]);
+        sq.insert("verificationCode",null,contentValues);//wrong_p_3
+
+        contentValues.put("sName",name[16]);
+        contentValues.put("trueOrFalse","true");
+        contentValues.put("resPic",sunnan[0]);
+        sq.insert("verificationCode",null,contentValues);//孙楠_q_1
+        contentValues.put("sName",name[16]);
+        contentValues.put("trueOrFalse","true");
+        contentValues.put("resPic",sunnan[1]);
+        sq.insert("verificationCode",null,contentValues);//孙楠_q_2
+        contentValues.put("sName",name[16]);
+        contentValues.put("trueOrFalse","true");
+        contentValues.put("resPic",sunnan[2]);
+        sq.insert("verificationCode",null,contentValues);//孙楠_q_3
+        contentValues.put("sName",name[16]);
+        contentValues.put("trueOrFalse","false");
+        contentValues.put("resPic",wrong_q[0]);
+        sq.insert("verificationCode",null,contentValues);//wrong_q_1
+        contentValues.put("sName",name[16]);
+        contentValues.put("trueOrFalse","false");
+        contentValues.put("resPic",wrong_q[1]);
+        sq.insert("verificationCode",null,contentValues);//wrong_q_2
+        contentValues.put("sName",name[16]);
+        contentValues.put("trueOrFalse","false");
+        contentValues.put("resPic",wrong_q[2]);
+        sq.insert("verificationCode",null,contentValues);//wrong_q_3
+
+        contentValues.put("sName",name[17]);
+        contentValues.put("trueOrFalse","true");
+        contentValues.put("resPic",yaochen[0]);
+        sq.insert("verificationCode",null,contentValues);//姚晨_r_1
+        contentValues.put("trueOrFalse","true");
+        contentValues.put("resPic",yaochen[1]);
+        sq.insert("verificationCode",null,contentValues);//姚晨_r_2
+        contentValues.put("trueOrFalse","true");
+        contentValues.put("resPic",yaochen[2]);
+        sq.insert("verificationCode",null,contentValues);//姚晨_r_3
+        contentValues.put("sName",name[17]);
+        contentValues.put("trueOrFalse","false");
+        contentValues.put("resPic",wrong_r[0]);
+        sq.insert("verificationCode",null,contentValues);//wrong_r_1
+        contentValues.put("sName",name[17]);
+        contentValues.put("trueOrFalse","false");
+        contentValues.put("resPic",wrong_r[1]);
+        sq.insert("verificationCode",null,contentValues);//wrong_r_2
+        contentValues.put("sName",name[17]);
+        contentValues.put("trueOrFalse","false");
+        contentValues.put("resPic",wrong_r[2]);
+        sq.insert("verificationCode",null,contentValues);//wrong_r_3
+
+        contentValues.put("sName",name[18]);
+        contentValues.put("trueOrFalse","true");
+        contentValues.put("resPic",wanglihong[0]);
+        sq.insert("verificationCode",null,contentValues);//王力宏_s_1
+        contentValues.put("sName",name[18]);
+        contentValues.put("trueOrFalse","true");
+        contentValues.put("resPic",wanglihong[1]);
+        sq.insert("verificationCode",null,contentValues);//王力宏_s_2
+        contentValues.put("sName",name[18]);
+        contentValues.put("trueOrFalse","true");
+        contentValues.put("resPic",wanglihong[2]);
+        sq.insert("verificationCode",null,contentValues);//王力宏_s_3
+        contentValues.put("sName",name[18]);
+        contentValues.put("trueOrFalse","false");
+        contentValues.put("resPic",wrong_s[0]);
+        sq.insert("verificationCode",null,contentValues);//wrong_s_1
+        contentValues.put("sName",name[18]);
+        contentValues.put("trueOrFalse","false");
+        contentValues.put("resPic",wrong_s[1]);
+        sq.insert("verificationCode",null,contentValues);//wrong_s_2
+        contentValues.put("sName",name[18]);
+        contentValues.put("trueOrFalse","false");
+        contentValues.put("resPic",wrong_s[2]);
+        sq.insert("verificationCode",null,contentValues);//wrong_s_3
+
+        contentValues.put("sName",name[19]);
+        contentValues.put("trueOrFalse","true");
+        contentValues.put("resPic",zhuyin[0]);
+        sq.insert("verificationCode",null,contentValues);//朱茵_t_1
+        contentValues.put("sName",name[19]);
+        contentValues.put("trueOrFalse","true");
+        contentValues.put("resPic",zhuyin[1]);
+        sq.insert("verificationCode",null,contentValues);//朱茵_t_2
+        contentValues.put("sName",name[19]);
+        contentValues.put("trueOrFalse","true");
+        contentValues.put("resPic",zhuyin[2]);
+        sq.insert("verificationCode",null,contentValues);//朱茵_t_3
+        contentValues.put("sName",name[19]);
+        contentValues.put("trueOrFalse","false");
+        contentValues.put("resPic",wrong_t[0]);
+        sq.insert("verificationCode",null,contentValues);//wrong_t_1
+        contentValues.put("sName",name[19]);
+        contentValues.put("trueOrFalse","false");
+        contentValues.put("resPic",wrong_t[1]);
+        sq.insert("verificationCode",null,contentValues);//wrong_t_2
+        contentValues.put("sName",name[19]);
+        contentValues.put("trueOrFalse","false");
+        contentValues.put("resPic",wrong_t[2]);
+        sq.insert("verificationCode",null,contentValues);//wrong_t_3
+
+        contentValues.put("sName",name[20]);
+        contentValues.put("trueOrFalse","true");
+        contentValues.put("resPic",liutao[0]);
+        sq.insert("verificationCode",null,contentValues);//刘涛_u_1
+        contentValues.put("sName",name[20]);
+        contentValues.put("trueOrFalse","true");
+        contentValues.put("resPic",liutao[1]);
+        sq.insert("verificationCode",null,contentValues);//刘涛_u_2
+        contentValues.put("sName",name[20]);
+        contentValues.put("trueOrFalse","true");
+        contentValues.put("resPic",liutao[2]);
+        sq.insert("verificationCode",null,contentValues);//刘涛_u_3
+        contentValues.put("sName",name[20]);
+        contentValues.put("trueOrFalse","false");
+        contentValues.put("resPic",wrong_u[0]);
+        sq.insert("verificationCode",null,contentValues);//wrong_u_1
+        contentValues.put("sName",name[20]);
+        contentValues.put("trueOrFalse","false");
+        contentValues.put("resPic",wrong_u[1]);
+        sq.insert("verificationCode",null,contentValues);//wrong_u_2
+        contentValues.put("sName",name[20]);
+        contentValues.put("trueOrFalse","false");
+        contentValues.put("resPic",wrong_u[2]);
+        sq.insert("verificationCode",null,contentValues);//wrong_u_3
+
+        contentValues.put("sName",name[21]);
+        contentValues.put("trueOrFalse","true");
+        contentValues.put("resPic",liukaiwei[0]);
+        sq.insert("verificationCode",null,contentValues);//刘恺威_v_1
+        contentValues.put("sName",name[21]);
+        contentValues.put("trueOrFalse","true");
+        contentValues.put("resPic",liukaiwei[1]);
+        sq.insert("verificationCode",null,contentValues);//刘恺威_v_2
+        contentValues.put("sName",name[21]);
+        contentValues.put("trueOrFalse","true");
+        contentValues.put("resPic",liukaiwei[2]);
+        sq.insert("verificationCode",null,contentValues);//刘恺威_v_3
+        contentValues.put("sName",name[21]);
+        contentValues.put("trueOrFalse","false");
+        contentValues.put("resPic",wrong_v[0]);
+        sq.insert("verificationCode",null,contentValues);//wrong_v_1
+        contentValues.put("sName",name[21]);
+        contentValues.put("trueOrFalse","false");
+        contentValues.put("resPic",wrong_v[1]);
+        sq.insert("verificationCode",null,contentValues);//wrong_v_2
+        contentValues.put("sName",name[21]);
+        contentValues.put("trueOrFalse","false");
+        contentValues.put("resPic",wrong_v[2]);
+        sq.insert("verificationCode",null,contentValues);//wrong_v_3
+
+        contentValues.put("sName",name[22]);
+        contentValues.put("trueOrFalse","true");
+        contentValues.put("resPic",tongliya[0]);
+        sq.insert("verificationCode",null,contentValues);//佟丽娅_w_1
+        contentValues.put("sName",name[22]);
+        contentValues.put("trueOrFalse","true");
+        contentValues.put("resPic",tongliya[1]);
+        sq.insert("verificationCode",null,contentValues);//佟丽娅_w_2
+        contentValues.put("sName",name[22]);
+        contentValues.put("trueOrFalse","true");
+        contentValues.put("resPic",tongliya[2]);
+        sq.insert("verificationCode",null,contentValues);//佟丽娅_w_3
+        contentValues.put("sName",name[22]);
+        contentValues.put("trueOrFalse","false");
+        contentValues.put("resPic",wrong_w[0]);
+        sq.insert("verificationCode",null,contentValues);//wrong_w_1
+        contentValues.put("sName",name[22]);
+        contentValues.put("trueOrFalse","false");
+        contentValues.put("resPic",wrong_w[1]);
+        sq.insert("verificationCode",null,contentValues);//wrong_w_2
+        contentValues.put("sName",name[22]);
+        contentValues.put("trueOrFalse","false");
+        contentValues.put("resPic",wrong_w[2]);
+        sq.insert("verificationCode",null,contentValues);//wrong_w_3
+
+        contentValues.put("sName",name[23]);
+        contentValues.put("trueOrFalse","true");
+        contentValues.put("resPic",tangyan[0]);
+        sq.insert("verificationCode",null,contentValues);//唐嫣_x_1
+        contentValues.put("sName",name[23]);
+        contentValues.put("trueOrFalse","true");
+        contentValues.put("resPic",tangyan[1]);
+        sq.insert("verificationCode",null,contentValues);//唐嫣_x_2
+        contentValues.put("sName",name[23]);
+        contentValues.put("trueOrFalse","true");
+        contentValues.put("resPic",tangyan[2]);
+        sq.insert("verificationCode",null,contentValues);//唐嫣_x_3
+        contentValues.put("sName",name[23]);
+        contentValues.put("trueOrFalse","false");
+        contentValues.put("resPic",wrong_x[0]);
+        sq.insert("verificationCode",null,contentValues);//wrong_x_1
+        contentValues.put("sName",name[23]);
+        contentValues.put("trueOrFalse","false");
+        contentValues.put("resPic",wrong_x[1]);
+        sq.insert("verificationCode",null,contentValues);//wrong_x_2
+        contentValues.put("sName",name[23]);
+        contentValues.put("trueOrFalse","false");
+        contentValues.put("resPic",wrong_x[2]);
+        sq.insert("verificationCode",null,contentValues);//wrong_x_3
+
+        contentValues.put("sName",name[24]);
+        contentValues.put("trueOrFalse","true");
+        contentValues.put("resPic",huge[0]);
+        sq.insert("verificationCode",null,contentValues);//胡歌_y_1
+        contentValues.put("sName",name[24]);
+        contentValues.put("trueOrFalse","true");
+        contentValues.put("resPic",huge[1]);
+        sq.insert("verificationCode",null,contentValues);//胡歌_y_2
+        contentValues.put("sName",name[24]);
+        contentValues.put("trueOrFalse","true");
+        contentValues.put("resPic",huge[2]);
+        sq.insert("verificationCode",null,contentValues);//胡歌_y_3
+        contentValues.put("sName",name[24]);
+        contentValues.put("trueOrFalse","false");
+        contentValues.put("resPic",wrong_y[0]);
+        sq.insert("verificationCode",null,contentValues);//wrong_y_1
+        contentValues.put("sName",name[24]);
+        contentValues.put("trueOrFalse","false");
+        contentValues.put("resPic",wrong_y[1]);
+        sq.insert("verificationCode",null,contentValues);//wrong_y_2
+        contentValues.put("sName",name[24]);
+        contentValues.put("trueOrFalse","false");
+        contentValues.put("resPic",wrong_y[2]);
+        sq.insert("verificationCode",null,contentValues);//wrong_y_3
+
+        contentValues.put("sName",name[25]);
+        contentValues.put("trueOrFalse","true");
+        contentValues.put("resPic",liuyifei[0]);
+        sq.insert("verificationCode",null,contentValues);//刘亦菲_z_1
+        contentValues.put("sName",name[25]);
+        contentValues.put("trueOrFalse","true");
+        contentValues.put("resPic",liuyifei[1]);
+        sq.insert("verificationCode",null,contentValues);//刘亦菲_z_2
+        contentValues.put("sName",name[25]);
+        contentValues.put("trueOrFalse","true");
+        contentValues.put("resPic",liuyifei[2]);
+        sq.insert("verificationCode",null,contentValues);//刘亦菲_z_3
+        contentValues.put("sName",name[25]);
+        contentValues.put("trueOrFalse","false");
+        contentValues.put("resPic",wrong_z[0]);
+        sq.insert("verificationCode",null,contentValues);//wrong_z_1
+        contentValues.put("sName",name[25]);
+        contentValues.put("trueOrFalse","false");
+        contentValues.put("resPic",wrong_z[1]);
+        sq.insert("verificationCode",null,contentValues);//wrong_z_2
+        contentValues.put("sName",name[25]);
+        contentValues.put("trueOrFalse","false");
+        contentValues.put("resPic",wrong_z[2]);
+        sq.insert("verificationCode",null,contentValues);//wrong_z_3
+
+    }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
+
+    }
+
 }

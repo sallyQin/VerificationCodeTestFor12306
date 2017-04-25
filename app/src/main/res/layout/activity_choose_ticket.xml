@@ -96,7 +96,7 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_width="match_parent"
-                android:layout_height="200dp">
+                android:layout_height="210dp">
 
                 <LinearLayout
                     android:id="@+id/show_content"

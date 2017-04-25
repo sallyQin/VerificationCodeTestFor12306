@@ -25,6 +25,9 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <provider
+            android:authorities="sally.verificationCode"
+            android:name=".InfoProvider"/>
     </application>
 
 </manifest>
